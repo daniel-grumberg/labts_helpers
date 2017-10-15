@@ -10,9 +10,9 @@ You will need an install of Python 3 and above that can deal with SSL i.e. you
 need to be able to write `import ssl` in your interpreter. You will also need to
 have the `requests` module not part of the Python standard library. To install
 it on your system follow the instructions
-[here](http://docs.python-requests.org/en/master/user/install/)
-This all the dependencies I am aware of. If there is anything else let me know,
-or better make a pull request for this document.
+[here](http://docs.python-requests.org/en/master/user/install/).
+These are all the dependencies I am aware of. If there is anything else let me
+know, or better make a pull request for this document.
 
 ## Contributions
 
