@@ -1,0 +1,71 @@
+#!/usr/local/bin/python3
+
+import argparse
+import requests
+import os
+import errno
+from labts_parsers import *
+
+LABTS = "https://teaching.doc.ic.ac.uk/labts/"
+
+################################################################################
+
+def get_students(student_file):
+  students = []
+  for line in student_file:
+    students.append(line.strip())
+  return students
+
+def get_credentials(credentials_file):
+  username = args.credentials.readline().strip()
+  passwd = args.credentials.readline().strip()
+  return (username, passwd)
+
+def mkdir_if_not_exists(path):
+  try:
+    os.makedirs(path)
+  except OSError as exception:
+    if exception.errno != errno.EEXIST:
+      raise
+
+def download_submissions(exercise, submissions, credentials, prefix):
+  exercise_path = prefix + exercise + '/'
+  mkdir_if_not_exists(exercise_path)
+  for (s, sub) in zip(submissions.keys(), submissions.values()):
+    response = requests.get(sub, auth=credentials)
+    with open(exercise_path + s + '.pdf', 'wb') as f:
+      f.write(response.content)
+
+def main(args):
+  students = get_students(args.students)
+  credentials = get_credentials(args.credentials)
+  response = requests.get(LABTS, auth=credentials)
+  main_page_parser = LabTSMainPageParser()
+  main_page_parser.feed(response.text)
+
+  links = main_page_parser.links
+  for (ex, link) in zip(links.keys(), links.values()):
+    response = requests.get(link, auth=credentials)
+    exercise_page_parser = ExercisePageParser(students)
+    exercise_page_parser.feed(response.text)
+    download_submissions(ex, exercise_page_parser.submissions, credentials,
+        args.prefix)
+
+################################################################################
+
+if __name__ == '__main__':
+  arg_parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+  arg_parser.add_argument('-s', '--students', type=open,
+      default='./students.txt',
+      help='''File containing the shortcodes of your students separated with
+      newlines''')
+  arg_parser.add_argument('-c', '--credentials', type=open,
+      default='./credentials.txt',
+      help='''File containing your username and password for LabTS separated by
+      newlines''')
+  arg_parser.add_argument('-p', '--prefix',
+      default='../original_submissions/',
+      help='''Path under which to save the submissions of your students. Make
+      sure this ends with a forward slash!''')
+  args = arg_parser.parse_args()
+  main(args)

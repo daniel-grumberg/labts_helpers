@@ -99,3 +99,7 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+#Ignore students and credentials
+students.txt
+credentials.txt
