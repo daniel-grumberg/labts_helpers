@@ -102,4 +102,5 @@ ENV/
 
 #Ignore students and credentials
 students.txt
-credentials.txt
+credentials.bin
+key.bin
