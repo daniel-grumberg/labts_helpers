@@ -61,10 +61,10 @@ if __name__ == '__main__':
             default='./students.txt',
             help='''File containing the shortcodes of your students separated with newlines''')
     arg_parser.add_argument('-c', '--credentials',
-            default='./credentials.bin',
+            default='./.credentials.bin',
             help='''File containing your encrypted username and password for LabTS''')
     arg_parser.add_argument('-k', '--key',
-            default='./key.bin',
+            default='./.key.bin',
             help='''File containing your secret key for your credentials''')
     arg_parser.add_argument('-p', '--prefix',
             default='../original_submissions/',

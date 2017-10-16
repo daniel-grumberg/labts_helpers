@@ -34,10 +34,10 @@ if __name__ == '__main__':
     arg_parser.add_argument('password',
             help='''Your DoC password''')
     arg_parser.add_argument('-o', '--output',
-            default='./credentials.bin',
+            default='./.credentials.bin',
             help='''The file where to store your encrypted credentials''')
     arg_parser.add_argument('-k', '--key',
-            default='./key.bin',
+            default='./.key.bin',
             help='''The file to store your secret key in''')
     args = arg_parser.parse_args()
     main(args)
